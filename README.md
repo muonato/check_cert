@@ -17,6 +17,7 @@ Set command on your nagios monitoring server
 Check certificate expiry date
 
 `$ ./check_cert.sh /etc/pki/tls/ca/server.pem
+
 1: CRITICAL - Certificate '/etc/pki/tls/server.pem' expires 2023-12-31 (in 22 days)`
 
 Check expiry dates for three certificates ( third expired )
