@@ -18,9 +18,6 @@
 #       $ bash check_cert.sh /etc/pki/tls/cert.pem
 #       (basic usage for single certificate on host)
 #
-#       check_nrpe -H $HOSTADDRESS$ -c check_cert -a '/etc/pki/tls/ca/ca.crt'
-#       (one certificate in nagios monitoring)
-#
 #       check_nrpe -H $HOSTADDRESS$ -c check_cert -a '/etc/pki/tls/ca/ca.crt /etc/pki/tls/ga.crt'
 #       (two certificates in nagios monitoring)
 #
@@ -28,8 +25,8 @@ function cert_expiry () {
     # Certificate path as function argument
     CPATH=$1
 
-    # Get certificate expiration date
-    CDATE=$(openssl x509 -noout -enddate -in $CPATH|grep -Po '=\K[^"]*')
+    # Get certificate expiration date ignoring errors
+    CDATE=$(openssl x509 -noout -enddate -in $CPATH 2>/dev/null|grep -Po '=\K[^"]*')
 
     # Show as full date; same as %Y-%m-%d
     CSHOW=$(date -d "$CDATE" "+%F")
@@ -37,15 +34,18 @@ function cert_expiry () {
     # Expiration date to unix epoch
     CEXPR=$(date -d "$CDATE" "+%s")
 
-    # Calculate certificate valid days left
+    # Today as unix epoch
+    TODAY=$(date '+%s')
+
+    # Count certification valid days left
     CLEFT=$(( ( CEXPR - TODAY )/(60*60*24) ))
 
-    if (($CLEFT>62)); then
-        echo "OK - Certificate '$CPATH' expiry '$CSHOW'"
+    if (($CLEFT>60)); then
+        echo "OK - Certificate '$CPATH' expires $CSHOW (in $(( $CLEFT / 30 )) months)"
     elif (($CLEFT>30)); then
-        echo "WARNING - Certificate '$CPATH' expiry '$CSHOW'"
+        echo "WARNING - Certificate '$CPATH' expires $CSHOW (in $CLEFT days)"
     elif (($CLEFT>0)); then
-        echo "CRITICAL - Certificate '$CPATH' expiry '$CSHOW'"
+        echo "CRITICAL - Certificate '$CPATH' expires $CSHOW (in $CLEFT days)"
     else
         echo "UNKNOWN - Certificate '$CPATH' is not valid"
     fi
@@ -53,33 +53,29 @@ function cert_expiry () {
 
 # BEGIN __main__
 if [[ -z "$1" ]]; then
-    echo -e "Usage: \
-            \n\t`basename $0` </path/to/cert> [</path/to/cert>...</path/to/cert]>]
-            Accepting any number of certificates as parameters"
+    echo -e "check ssl certificate expiry\n\tUsage:\
+    `basename $0` </path/to/cert> [</path/to/cert>...</path/to/cert]>]\n
+    \tmissing path to certificate
+            "
     exit 3
 else
-     CSTAT="Check expiration for ($#) certificate(s)"
+     CSTAT=""
 fi
 
 # Loop thru arguments
 for arg in "$@"; do
-     CSTAT="${CSTAT}\n$(cert_expiry $arg)"
+    CSTAT="${CSTAT}$(cert_expiry $arg)\n"
 done
 
-# Print status
-echo -e $CSTAT
+# Status excl. line feed
+echo -e ${CSTAT%??}
 
-# Define result conditions
-WARN=$(echo -e $CSTAT|grep -om 1 "WARNING")
-UNKN=$(echo -e $CSTAT|grep -om 1 "UNKNOWN")
-CRIT=$(echo -e $CSTAT|grep -om 1 "CRITICAL")
-
-# Apply result exit codes
-if [[ -n $UNKN ]]; then
+# Apply exit code corresponding to expiry status message
+if [[ -n $(echo -e $CSTAT|grep -om 1 "UNKNOWN") ]]; then
     exit 3
-elif [[ -n $CRIT ]]; then
+elif [[ -n $(echo -e $CSTAT|grep -om 1 "CRITICAL") ]]; then
     exit 2
-elif [[ -n $WARN ]]; then
+elif [[ -n $(echo -e $CSTAT|grep -om 1 "WARNING") ]]; then
     exit 1
 else
     exit 0
