@@ -6,7 +6,7 @@
 # compatible with Nagios monitoring as host plugin
 #
 # Usage:
-#       bash check_cert.sh <path-to-cert> [<path-to-cert>...<path-to-cert>]
+#       bash check_cert.sh <path-to-cert> [<path-to-cert>] ...
 #
 #       Nagios nrpe configuration on host :
 #       command[check_cert]=/path/to/plugins/check_cert.sh $ARG1$
@@ -15,11 +15,11 @@
 #       1: Path to ssl certificate file
 #
 # Examples:
-#       $ bash check_cert.sh /etc/pki/tls/cert.pem
-#       (basic usage for single certificate on host)
+#       $ bash check_cert.sh /path/to/cert.pem
+#       (single certificate on host)
 #
-#       check_nrpe -H $HOSTADDRESS$ -c check_cert -a '/etc/pki/tls/ca/ca.crt /etc/pki/tls/ga.crt'
-#       (two certificates in nagios monitoring)
+#       check_nrpe -H $HOSTADDRESS$ -c check_cert -a '/path/to/cert.pem /path/to/ssl.crt'
+#       (nagios monitoring for two certificates)
 #
 function cert_expiry () {
     # Certificate path as function argument
@@ -62,9 +62,9 @@ else
      CSTAT=""
 fi
 
-# Loop thru arguments
-for arg in "$@"; do
-    CSTAT="${CSTAT}$(cert_expiry $arg)\n"
+# Loop thru args to get status
+for(( i=1; i<=$#; i++ )); do
+    CSTAT="${CSTAT}${i}: $(cert_expiry ${@:i:1})\n"
 done
 
 # Status excl. line feed
