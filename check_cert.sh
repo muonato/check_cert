@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# muonato/check_cert.sh @ GitHub (DEC-2023)
+# muonato/check_cert.sh @ GitHub (2023-12-10)
 #
 # Reports ssl certificate(s) expiration date using openssl,
 # compatible with Nagios monitoring as host plugin
