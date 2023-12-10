@@ -37,15 +37,16 @@ function cert_expiry () {
     # Today as unix epoch
     TODAY=$(date '+%s')
 
-    # Count certification valid days left
+    # Count certificate valid days left
     CLEFT=$(( ( CEXPR - TODAY )/(60*60*24) ))
 
+    # Return status message
     if (($CLEFT>60)); then
-        echo "OK - Certificate '$CPATH' expires $CSHOW (in $(( $CLEFT / 30 )) months)"
+        echo "OK - Certificate '$CPATH' expires '$CSHOW' (in $(( $CLEFT / 30 )) months)"
     elif (($CLEFT>30)); then
-        echo "WARNING - Certificate '$CPATH' expires $CSHOW (in $CLEFT days)"
+        echo "WARNING - Certificate '$CPATH' expires '$CSHOW' (in $CLEFT days)"
     elif (($CLEFT>0)); then
-        echo "CRITICAL - Certificate '$CPATH' expires $CSHOW (in $CLEFT days)"
+        echo "CRITICAL - Certificate '$CPATH' expires '$CSHOW' (in $CLEFT days)"
     else
         echo "UNKNOWN - Certificate '$CPATH' is not valid"
     fi
@@ -55,19 +56,19 @@ function cert_expiry () {
 if [[ -z "$1" ]]; then
     echo -e "check ssl certificate expiry\n\tUsage:\
     `basename $0` </path/to/cert> [</path/to/cert>...</path/to/cert]>]\n
-    \tmissing path to certificate
+    \tERROR: missing path to certificate
             "
     exit 3
 else
      CSTAT=""
 fi
 
-# Loop thru args to get status
-for(( i=1; i<=$#; i++ )); do
+# Loop args and append to status
+for (( i=1; i<=$#; i++ )); do
     CSTAT="${CSTAT}${i}: $(cert_expiry ${@:i:1})\n"
 done
 
-# Status excl. line feed
+# Print status excl. newline
 echo -e ${CSTAT%??}
 
 # Apply exit code corresponding to expiry status message
