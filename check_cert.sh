@@ -58,8 +58,7 @@ function cert_expiry () {
 if [[ -z "$1" ]]; then
     echo -e "check ssl certificate expiry\n\tUsage:\
     `basename $0` </path/to/cert> [</path/to/cert>...</path/to/cert]>]\n
-    \tERROR: missing path to certificate
-            "
+    \tERROR: missing path to certificate"
     exit 3
 else
      CSTAT=""
