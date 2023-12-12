@@ -73,7 +73,7 @@ done
 # Print status excl. newline
 echo -e ${CSTAT%??}
 
-# Apply exit code corresponding to expiry status message
+# Apply exit code corresponding to status message
 if [[ -n $(echo -e $CSTAT|grep -om 1 "UNKNOWN") ]]; then
     exit 3
 elif [[ -n $(echo -e $CSTAT|grep -om 1 "CRITICAL") ]]; then
