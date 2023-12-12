@@ -41,14 +41,16 @@ function cert_expiry () {
     CLEFT=$(( ( CEXPR - TODAY )/(60*60*24) ))
 
     # Return status message
-    if (($CLEFT>60)); then
+    if [[ -z "$CDATE" ]]; then
+        echo "UNKNOWN - Certificate '$CPATH' openssl error"
+    elif [[ $CLEFT -ge 60 ]]; then
         echo "OK - Certificate '$CPATH' expires '$CSHOW' (in $(( $CLEFT / 30 )) months)"
-    elif (($CLEFT>30)); then
+    elif [[ $CLEFT -ge 30 ]]; then
         echo "WARNING - Certificate '$CPATH' expires '$CSHOW' (in $CLEFT days)"
-    elif (($CLEFT>0)); then
+    elif [[ $CLEFT -ge 0 ]]; then
         echo "CRITICAL - Certificate '$CPATH' expires '$CSHOW' (in $CLEFT days)"
     else
-        echo "UNKNOWN - Certificate '$CPATH' is not valid"
+        echo "UNKNOWN - Certificate '$CPATH'"
     fi
 }
 
