@@ -65,7 +65,7 @@ else
      CSTAT=""
 fi
 
-# Loop args and append to status
+# Loop args for status message
 for (( i=1; i<=$#; i++ )); do
     CSTAT="${CSTAT}${i}: $(cert_expiry ${@:i:1})\n"
 done
