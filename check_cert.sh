@@ -50,7 +50,7 @@ function cert_expiry () {
     elif [[ $CLEFT -ge 0 ]]; then
         echo "CRITICAL - Certificate '$CPATH' expires '$CSHOW' (in $CLEFT days)"
     else
-        echo "UNKNOWN - Certificate '$CPATH'"
+        echo "CRITICAL - Certificate '$CPATH' expired"
     fi
 }
 
