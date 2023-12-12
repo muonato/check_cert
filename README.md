@@ -38,5 +38,5 @@ $ ./check_cert.sh /etc/pki/tls/ca/server.pem /etc/pki/tls/cert.pem /etc/pki/tls/
 Check non-existent file
 
 ```$ ./check_cert.sh /foo/bar/file
-1: UNKNOWN - Certificate '/foo/bar/file' is not valid
+1: UNKNOWN - Certificate '/foo/bar/file' openssl error
 ```
