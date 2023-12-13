@@ -1,9 +1,12 @@
 # check_cert
-Nagios monitoring compatible SSL certificate expiry check
+Nagios monitoring compatible SSL certificate expiry and revocation list check
 
 ## Usage
 ```
-check_cert.sh </path/to/certificate> [</path/to/certificate>] ...
+check_cert.sh [-r] </path/to/certificate> [</path/to/certificate>] ...
+
+Options:
+    -r   revocation list
 ```
 
 ## Nagios monitoring setup
@@ -24,7 +27,7 @@ Check certificate expiry date
 
 ```
 $ ./check_cert.sh /etc/pki/tls/ca/server.pem
-1: CRITICAL - Certificate '/etc/pki/tls/server.pem' expires 2023-12-31 (in 22 days)
+1: CRITICAL - Certificate '/etc/pki/tls/server.pem' expiry '2023-12-31' (in 22 days)
 ```
 
 Check expiry of three certificates
@@ -33,10 +36,18 @@ Check expiry of three certificates
 $ ./check_cert.sh /etc/pki/tls/ca/server.pem /etc/pki/tls/cert.pem /etc/pki/tls/ssl.crt
 1: CRITICAL - Certificate '/etc/pki/tls/server.pem' expires 2023-12-31 (in 22 days)
 2: OK - Certificate '/etc/pki/tls/cert.pem' expires 2030-12-31 (in 85 months)
-3: CRITICAL - Certificate '/etc/pki/tls/ssl.crt' is invalid
+3: CRITICAL - Certificate '/etc/pki/tls/ssl.crt' is due
 ```
 Check non-existent certificate
 
-```$ ./check_cert.sh /foo/bar/file
-1: UNKNOWN - Certificate '/foo/bar/file' openssl failed
+```
+$ ./check_cert.sh /foo/bar/file
+1: UNKNOWN - Certificate '/foo/bar/file' expiry
+```
+
+Check revocation list due date
+
+```
+$ ./check_cert.sh -r /etc/pki/tls/crl/server.pem
+1: OK - Certificate '/etc/pki/tls/crl/ripa.crl.pem' revocation '2025-10-26' (in 22 months)
 ```
