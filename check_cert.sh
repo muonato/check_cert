@@ -73,12 +73,13 @@ done
 echo -e ${CSTAT%??}
 
 # Apply exit code corresponding to status message
-if [[ -n $(echo -e $CSTAT|grep -om 1 "UNKNOWN") ]]; then
-    exit 3
-elif [[ -n $(echo -e $CSTAT|grep -om 1 "CRITICAL") ]]; then
+
+if [[ -n $(echo -e $CSTAT|grep -om 1 "CRITICAL") ]]; then
     exit 2
 elif [[ -n $(echo -e $CSTAT|grep -om 1 "WARNING") ]]; then
     exit 1
+if [[ -n $(echo -e $CSTAT|grep -om 1 "UNKNOWN") ]]; then
+    exit 3
 else
     exit 0
 fi
