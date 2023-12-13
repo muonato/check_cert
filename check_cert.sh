@@ -78,7 +78,7 @@ if [[ -n $(echo -e $CSTAT|grep -om 1 "CRITICAL") ]]; then
     exit 2
 elif [[ -n $(echo -e $CSTAT|grep -om 1 "WARNING") ]]; then
     exit 1
-if [[ -n $(echo -e $CSTAT|grep -om 1 "UNKNOWN") ]]; then
+elif [[ -n $(echo -e $CSTAT|grep -om 1 "UNKNOWN") ]]; then
     exit 3
 else
     exit 0
