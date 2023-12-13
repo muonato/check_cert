@@ -19,7 +19,7 @@
 #       (single certificate on host)
 #
 #       check_nrpe -H $HOSTADDRESS$ -c check_cert -a '/path/to/cert.pem /path/to/ssl.crt'
-#       (nagios monitoring for two certificates)
+#       (nagios monitor expression for two certificates)
 #
 function cert_expiry () {
     # Certificate path as function argument
