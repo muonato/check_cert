@@ -33,7 +33,7 @@ Check expiry dates for three certificates ( third expired )
 $ ./check_cert.sh /etc/pki/tls/ca/server.pem /etc/pki/tls/cert.pem /etc/pki/tls/ssl.crt
 1: CRITICAL - Certificate '/etc/pki/tls/server.pem' expires 2023-12-31 (in 22 days)
 2: OK - Certificate '/etc/pki/tls/cert.pem' expires 2030-12-31 (in 85 months)
-3: CRITICAL - Certificate '/etc/pki/tls/ssl.crt' expired
+3: CRITICAL - Certificate '/etc/pki/tls/ssl.crt' is invalid
 ```
 Check non-existent file
 
