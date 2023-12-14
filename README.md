@@ -38,6 +38,7 @@ $ ./check_cert.sh /etc/pki/tls/ca/server.pem /etc/pki/tls/cert.pem /etc/pki/tls/
 2: OK - Certificate '/etc/pki/tls/cert.pem' expires 2030-12-31 (in 85 months)
 3: CRITICAL - Certificate '/etc/pki/tls/ssl.crt' is due
 ```
+
 Check non-existent certificate
 
 ```
@@ -50,4 +51,11 @@ Check revocation list due date
 ```
 $ ./check_cert.sh -r /etc/pki/tls/crl/server.pem
 1: OK - Certificate '/etc/pki/tls/crl/ripa.crl.pem' revocation '2025-10-26' (in 22 months)
+```
+##Platform
+Script development and testing
+```
+GNU bash, version 4.2.46(2)-release (x86_64-redhat-linux-gnu)
+CentOS Linux release 7.9.2009 (Core)
+OpenSSL 1.0.2k-fips 26 Jan 2017
 ```
