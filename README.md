@@ -52,7 +52,7 @@ Check revocation list due date
 $ ./check_cert.sh -r /etc/pki/tls/crl/server.pem
 1: OK - Certificate '/etc/pki/tls/crl/ripa.crl.pem' revocation '2025-10-26' (in 22 months)
 ```
-##Platform
+## Platform
 Script development and testing
 ```
 GNU bash, version 4.2.46(2)-release (x86_64-redhat-linux-gnu)
