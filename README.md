@@ -55,7 +55,8 @@ $ ./check_cert.sh -r /etc/pki/tls/crl/server.pem
 ## Platform
 Script development and testing
 ```
-Red Hat Enterprise Linux 8.9 (Ootpa)
-Docker version 24.0.7
+GNU bash, version 4.2.46(2)-release (x86_64-redhat-linux-gnu)
+CentOS Linux release 7.9.2009 (Core)
+OpenSSL 1.0.2k-fips 26 Jan 2017
 Opsview Core 3.20140409.0
 ```
