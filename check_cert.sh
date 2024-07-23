@@ -1,32 +1,46 @@
 #!/usr/bin/env bash
 #
-# muonato/check_cert.sh @ GitHub (13-DEC-2023)
+# muonato/check_cert.sh @ GitHub (23-JUL-2024)
 #
-# Reports ssl certificate(s) revocation list or expiration date,
+# Reports SSL certificate(s) and revocation list expiration date,
 # compatible with Nagios monitoring as host plugin
 #
 # Usage:
-#       bash check_cert.sh [OPTIONS] <path-to-cert> [<path-to-cert>] ...
+#       bash check_cert.sh </path/to/file> [</path/to/file>] ...
 #
 #       Nagios nrpe configuration on host :
 #       command[check_cert]=/path/to/plugins/check_cert.sh $ARG1$
 #
 # Options:
-#       -r  revocation list date
+#       None
 #
 # Examples:
 #       $ bash check_cert.sh /path/to/cert.pem
-#       (certificate expiry date)
-#
-#       $ bash chech_cert.sh -r /path/to/cert.crl.pem
-#       (certificate revocation list date)
+#       (Certificate expiry or revocation list date)
 #
 #       check_nrpe -H $HOSTADDRESS$ -c check_cert -a '/path/to/cert.pem /path/to/ssl.crt'
-#       (nagios monitor expression for two certificates)
+#       (Nagios monitor expression for two certificates)
+#
+# Notes:
+#       GNU bash, version 4.2.46(2)-release (x86_64-redhat-linux-gnu)
+#       CentOS Linux release 7.9.2009 (Core)
+#       OpenSSL 1.0.2k-fips 26 Jan 2017
+#       Opsview Core 3.20140409.0
 #
 function cert_query () {
     # Certificate path as function argument
     CPATH=$1
+
+    # Inspect CRL occurrence on first line
+    ISCRL=$(sed -n '1p' $CPATH|grep -o "CRL")
+
+    if [[ -z "$ISCRL" ]]; then
+        PARAM="x509 -enddate"
+        CFUNC="expiry"
+    else
+        PARAM="crl -nextupdate"
+        CFUNC="revocation"
+    fi
 
     # Get certificate due date - ignoring errors
     CDATE=$(openssl $PARAM -noout -in $CPATH 2>/dev/null|grep -Po '=\K[^"]*')
@@ -60,20 +74,12 @@ function cert_query () {
 # BEGIN __main__
 USAGE="check ssl certificate\n\tUsage:\
     `basename $0` [-r] </path/to/cert> [</path/to/cert> ...>]\n
-    \tERROR: missing path to certificate"
+    \tERROR: missing filename"
 
 # Validate arguments
 if [[ -z "$1" ]]; then
     echo -e $USAGE
     exit 3
-elif [[ $1 == "-r" ]]; then
-    PARAM="crl -nextupdate"
-    CFUNC="revocation"
-    INDEX=2
-else
-    PARAM="x509 -enddate"
-    CFUNC="expiry"
-    INDEX=1
 fi
 
 # Status message
@@ -83,7 +89,7 @@ CSTAT=""
 CNUMR=1
 
 # Loop args to append status message
-for (( i=$INDEX; i<=$#; i++ )); do
+for (( i=1; i<=$#; i++ )); do
     CSTAT="${CSTAT}${CNUMR}: $(cert_query ${@:i:1})\n"
     ((CNUMR++))
 done
