@@ -3,10 +3,10 @@ Nagios monitoring compatible SSL certificate expiry and revocation list check
 
 ## Usage
 ```
-check_cert.sh [-r] </path/to/certificate> [</path/to/certificate>] ...
+check_cert.sh </path/to/certificate> [</path/to/certificate>] ...
 
 Options:
-    -r   revocation list
+    None
 ```
 
 ## Nagios monitoring setup
@@ -49,8 +49,8 @@ $ ./check_cert.sh /foo/bar/file
 Check revocation list due date
 
 ```
-$ ./check_cert.sh -r /etc/pki/tls/crl/server.pem
-1: OK - Certificate '/etc/pki/tls/crl/ripa.crl.pem' revocation '2025-10-26' (in 22 months)
+$ ./check_cert.sh /etc/pki/tls/crl/server.pem
+1: OK - Certificate '/etc/pki/tls/crl/foobar.crl.pem' revocation '2025-10-26' (in 22 months)
 ```
 ## Platform
 Script development and testing
