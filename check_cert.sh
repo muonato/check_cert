@@ -73,8 +73,7 @@ function cert_query () {
 
 # BEGIN __main__
 USAGE="check ssl certificate\n\tUsage:\
-    `basename $0` [-r] </path/to/cert> [</path/to/cert> ...>]\n
-    \tERROR: missing filename"
+    `basename $0` [-r] </path/to/cert> [</path/to/cert> ...>]\n"
 
 # Validate arguments
 if [[ -z "$1" ]]; then
