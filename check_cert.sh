@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# muonato/check_cert.sh @ GitHub (23-JUL-2024)
+# muonato/check_cert.sh @ GitHub (24-JUL-2024)
 #
-# Reports SSL certificate(s) expiration date or revocation list,
+# Reports SSL certificate(s) expiration date or revocation,
 # compatible with Nagios monitoring as host plugin
 #
 # Usage:
@@ -42,7 +42,7 @@ function cert_query () {
         CFUNC="revocation"
     fi
 
-    # Get certificate due date - ignoring errors
+    # Get the due date - suppress errors
     CDATE=$(openssl $PARAM -noout -in $CPATH 2>/dev/null|grep -Po '=\K[^"]*')
 
     # Show as full date; same as %Y-%m-%d
@@ -73,7 +73,7 @@ function cert_query () {
 
 # BEGIN __main__
 USAGE="check ssl certificate\n\tUsage:\
-    `basename $0` [-r] </path/to/cert> [</path/to/cert> ...>]\n"
+    `basename $0` </path/to/cert> [</path/to/cert> ...>]\n"
 
 # Validate arguments
 if [[ -z "$1" ]]; then
@@ -106,6 +106,6 @@ elif [[ -n $(echo -e $CSTAT|grep -om 1 "UNKNOWN") ]]; then
 elif [[ -n $(echo -e $CSTAT|grep -om 1 "OK") ]]; then
     exit 0
 else
-    echo -e $USAGE
+    echo -e "$USAGE\tERROR: unexpected failure"
     exit 3
 fi
