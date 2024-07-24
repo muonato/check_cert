@@ -2,7 +2,7 @@
 #
 # muonato/check_cert.sh @ GitHub (23-JUL-2024)
 #
-# Reports SSL certificate(s) and revocation list expiration date,
+# Reports SSL certificate(s) expiration date or revocation list,
 # compatible with Nagios monitoring as host plugin
 #
 # Usage:
