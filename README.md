@@ -23,7 +23,7 @@ command[check_cert]=/path/to/plugins/check_cert.sh $ARG1$
 Set command on your nagios monitoring server
 
 ```
-check_nrpe -H $HOSTADDRESS$ -c check_cert -a "-f '/path/to/certificate.pem'"
+check_nrpe -H $HOSTADDRESS$ -c check_cert -a "-f '/path/to/certificate.pem' -w 90 -c 15"
 ```
 
 ## Examples
