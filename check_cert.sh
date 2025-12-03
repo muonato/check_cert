@@ -134,6 +134,6 @@ elif [[ -n $(echo -e $CSTAT|grep -om 1 "UNKNOWN") ]]; then
 elif [[ -n $(echo -e $CSTAT|grep -om 1 "OK") ]]; then
     exit 0
 else
-    echo -e "$USAGE\tERROR: unexpected failure"
+    echo -e "$0: unexpected failure"
     exit 3
 fi
