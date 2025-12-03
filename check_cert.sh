@@ -7,9 +7,6 @@
 # Usage:
 #       bash check_cert.sh -f '</path/to/file> [</path/to/file>]'
 #
-#       Nagios nrpe configuration on host :
-#       command[check_cert]=/path/to/plugins/check_cert.sh $ARG1$
-#
 # Arguments:
 #       -f : String of certificate paths
 #
@@ -34,10 +31,9 @@ function help() {
 Usage: $(basename "$0") -f "</path/to/cert> ... [/path/to/cert]"> [OPTIONS]
 
 OPTIONS
-    -f string of file paths
     -h display this help menu
-    -w warning alert in days
-    -c critical alert in days
+    -w warning alert in days [default: 60]
+    -c critical alert in days [default: 30]
 
 EOF
 }
