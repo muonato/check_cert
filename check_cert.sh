@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 #
-# muonato/check_cert.sh @ GitHub (02-DEC-2025)
+# muonato/check_cert.sh @ GitHub (04-DEC-2025)
 #
 # Reports SSL certificate(s) expiration date or revocation
 #
 # Usage:
 #       bash check_cert.sh -f '</path/to/file> [</path/to/file>]'
+#
+#       Nagios nrpe configuration on host :
+#       command[check_cert]=/path/to/plugins/check_cert.sh $ARG1$
 #
 # Arguments:
 #       -f : String of certificate paths
@@ -28,14 +31,17 @@
 
 function help() {
         cat <<EOF
-Usage: $(basename "$0") -f "</path/to/cert> ... [/path/to/cert]"> [OPTIONS]
+check_cert 04-DEC-2025 muonato@github
+Usage: $(basename "$0") -f "</path/to/cert> [/path/to/cert]"> [OPTIONS]
 
 OPTIONS
+    -f string of file paths
     -h display this help menu
-    -w warning alert in days [default: 60]
-    -c critical alert in days [default: 30]
+    -w warning alert in days
+    -c critical alert in days
 
 EOF
+exit 0
 }
 
 function cert_query () {
@@ -102,7 +108,6 @@ done
 if [[ -z $CERT ]]; then
     echo "$0: certificate path missing"
     help
-    exit 0
 fi
 
 # Status message
