@@ -35,7 +35,6 @@ check_cert 04-DEC-2025 muonato@github
 Usage: $(basename "$0") -f "</path/to/cert> [/path/to/cert]"> [OPTIONS]
 
 OPTIONS
-    -f string of file paths
     -h display this help menu
     -w warning alert in days
     -c critical alert in days
